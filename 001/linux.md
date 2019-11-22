@@ -215,3 +215,89 @@ ip 地址
 - ip不能相同, 否则地址冲突
 
 ### 2.2 ifconfig
+
+- `ifconfig | grep inet` 查看 / 配置 计算机当前的网卡配置信息
+- 一台计算机中可能会有一个物理网卡 和 多个虚拟网卡, 在 linux 中, 物理网卡的名字通常以`ensXX`
+- `127.0.0.1` 本地回环 / 换回 地址, 一般测试本机网卡是否正常
+
+### 2.3 ping
+
+- `ping ip_address` 检测目标主机是否连接正常
+    + 有连接, 会接到包, 时间越长, 速度越慢
+    + 没有连接, `unreachable`
+- `ping 127.0.0.7` 检测本地网卡是否正常
+- 原理类似潜水艇
+
+### 3. 远程登陆和复制文件
+
+command | e_word | desc
+-|-|-
+ssh username@ip | secure shell | shutdown / reboot
+`scp username@ip:[filename or path] username@ip:[filename or path]` | secure copy | 远程复制文件
+
+#### 3.1 ssh (important)
+
+在 linux 中 ssh 是非常常用的工具, 通过 ssh 客户端, 我们可以连接到运行了 ssh 服务器的远程机器上
+
+`ssh client <= 加密, 压缩 =>ssh server`
+
+- ssh client 是使用 `Secure Shell (SSH)` 协议连接到远程计算机的软件程序
+- ssh 是目前比较可靠, 专为远程登陆绘画和其他网络服务 提供安全性的协议
+    + 有效防止远程管理中的 信息泄露
+    + 对数据加密, 防止 DNS 欺骗 和 ip 欺骗
+- 压缩, 加快速度
+
+域名: ip 别名
+款口号:
+
+serve | port
+-|-
+SSH server | 22
+Web server | 80
+HTTPS | 443
+FTP server | 21
+
+==SSH client==
+
+`ssh [-p port] user@remote`
+- user: username
+- remote: ip / domain_name
+- port: ssh server 监听的端口, 不指定即为22
+
+
+- exit 推出当前用户登陆
+- ssh 终端命令只能在 linux or unix 系统使用
+- windows: 安装 PuTTY or XShell 客户端软件
+
+
+- `sudo ...` 超级用户
+
+
+==windows 下 SSH 客户端的安装==
+
+- Putty
+- XShell
+
+
+#### 3.2 scp (important)
+
+scp is secure copy: 远程拷贝文件
+
+他的地址可是与 ssh 基本相同, 但是 ==指定端口时使用的时大写的 `-P`==
+
+==`-r` 复制文件夹==
+
+```ssh
+// local -> remote /home/Desktop/01.py
+// 相对路径, 以用户 home 作为参照路径
+scp -P port 01.py user@remote:Desktop/01.py
+
+// remote /home/Desktop/01.py -> local
+scp -P port user@remote:Desktop/01.py 01.py
+
+```
+
+param | desc
+-|-
+`-r` | 必须为目录名, 递归复制该文件夹下所有内容
+`-P` | 若端口不是 22, 指定端口
